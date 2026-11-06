@@ -1,523 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Computer Architecture Exam</title>
-<style>
-:root {
-  --bg:#0b1020;
-  --panel:#141d35;
-  --text:#f4f7ff;
-  --muted:#a9b6d3;
-  --accent:#7c5cff;
-  --cyan:#20d5d2;
-  --good:#27c58b;
-  --bad:#ff647c;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;padding:20px;
-  background:radial-gradient(circle at top,#26356a,transparent 40%),var(--bg);
-  color:var(--text);
-  font:16px/1.6 Arial,sans-serif;
-}
-.wrap{max-width:850px;margin:auto}
-header{padding:25px 5px}
-h1{font-size:clamp(30px,6vw,48px);line-height:1.1}
-header p,.small{color:var(--muted)}
-.card{
-  background:linear-gradient(145deg,#1b2948,#111a30);
-  border:1px solid #344365;
-  border-radius:20px;
-  padding:25px;
-  box-shadow:0 15px 50px #0005;
-}
-.tag{color:var(--cyan);font-weight:bold;letter-spacing:2px}
-input{
-  width:100%;padding:14px;border-radius:12px;
-  background:#0d1630;border:1px solid #45577e;
-  color:white;font-size:17px;margin:10px 0;
-}
-button{
-  border:0;border-radius:12px;padding:13px 18px;
-  font-weight:bold;font-size:16px;cursor:pointer;
-}
-.primary{background:linear-gradient(100deg,#7c5cff,#4e8bff);color:white}
-.secondary{background:#2a3a5d;color:white;border:1px solid #52658e}
-button:disabled{opacity:.4;cursor:not-allowed}
-.pill{
-  background:#263657;border:1px solid #3b4e75;
-  border-radius:30px;padding:6px 12px;font-size:13px;
-}
-.row{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;align-items:center}
-#exam,#result{display:none}
-.progress{height:8px;background:#0b142a;border-radius:20px;margin:20px 0;overflow:hidden}
-.bar{height:100%;width:0;background:linear-gradient(90deg,#7c5cff,#20d5d2)}
-.question{font-size:22px;font-weight:bold;margin:20px 0}
-.choices{display:grid;gap:10px}
-.choice{
-  display:flex;gap:12px;align-items:center;
-  padding:14px;border:1px solid #3a4d73;
-  background:#111c35;border-radius:14px;cursor:pointer;
-}
-.choice:hover,.choice.selected{border-color:var(--cyan);background:#17364a}
-.letter{
-  min-width:30px;height:30px;border-radius:9px;
-  background:#2b3d63;display:grid;place-items:center;
-}
-.nav{display:flex;gap:10px;margin-top:22px}
-.nav button{flex:1}
-.score{font-size:55px;font-weight:bold;color:var(--cyan)}
-.review{border-top:1px solid #344365;padding:15px 0}
-.correct{color:var(--good);font-weight:bold}
-.wrong{color:var(--bad);font-weight:bold}
-.explain{color:#c2cee7;margin-top:8px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture & Organization Quiz</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+    </style>
 </head>
-<body>
-<div class="wrap">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
 
-<header>
-  <div class="tag">INTERACTIVE ASSESSMENT · 52 QUESTIONS</div>
-  <h1>Computer Architecture<br>
-  <span style="color:#20d5d2">Exam Challenge</span></h1>
-  <p>Memory Organization, RAM & ROM, 8086 Modes and Signals, Pentium Signals, and Bus Timing.</p>
-</header>
+    <!-- Header Navigation -->
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-sm">
+                    <i class="fa-solid fa-microchip text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight text-slate-900 dark:text-white">Computer Architecture Quiz</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">8086 Microprocessor, Memory & Cache Architecture</p>
+                </div>
+            </div>
+            <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+            </button>
+        </div>
+    </header>
 
-<section class="card" id="start">
-  <h2>Ready to begin?</h2>
-  <p class="small">Enter your name and start the exam.</p>
-  <label>Student name</label>
-  <input id="student" placeholder="Enter your name">
-  <p class="small">52 MCQ Questions · Instant Results · Works Offline</p>
-  <button class="primary" id="startBtn" style="width:100%">Start Exam</button>
-</section>
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
 
-<section class="card" id="exam">
-  <div class="row">
-    <span class="tag" id="counter"></span>
-    <span class="pill" id="answered">Answered: 0</span>
-  </div>
-  <div class="progress"><div class="bar" id="bar"></div></div>
-  <div class="question" id="question"></div>
-  <div class="choices" id="choices"></div>
-  <div class="nav">
-    <button class="secondary" id="prev">Previous</button>
-    <button class="primary" id="next">Next</button>
-  </div>
-</section>
+        <!-- 1. STUDENT NAME INPUT SCREEN -->
+        <section id="welcomeScreen" class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-10 shadow-xl border border-slate-100 dark:border-slate-700/60 max-w-lg mx-auto w-full text-center">
+            <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Welcome Students!</h2>
+            <p class="text-slate-600 dark:text-slate-300 text-sm mb-6">Enter your details to initiate the examination on Microprocessor Signals, Bus Cycles, Memory Structures, and Cache Mapping.</p>
+            
+            <form id="startForm" onsubmit="startQuiz(event)" class="space-y-4 text-left">
+                <div>
+                    <label for="studentName" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Full Student Name</label>
+                    <input type="text" id="studentName" required placeholder="e.g. John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all dark:text-white">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all transform active:scale-95">
+                    <span>Start Assessment</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                </button>
+            </form>
+        </section>
 
-<section class="card" id="result">
-  <div class="tag">EXAM COMPLETED</div>
-  <h2 id="greeting">Your Result</h2>
-  <div class="score" id="score"></div>
-  <p id="summary"></p>
-  <div class="row">
-    <button class="primary" id="reviewBtn">Review Answers</button>
-    <button class="secondary" id="downloadBtn">Download Result</button>
-    <button class="secondary" id="retakeBtn">Retake Exam</button>
-  </div>
-  <div id="review" style="display:none"></div>
-</section>
-</div>
-<script>
-const bank = [
-{
-q:"Which register holds the instruction currently being executed?",
-opts:["Program Counter (PC)","Instruction Register (IR)","Memory Address Register (MAR)","Memory Data Register (MDR)"],
-a:1,why:"The IR stores the instruction currently being executed."
-},
-{
-q:"What does the Program Counter (PC) contain?",
-opts:["The address of the next instruction","The current data value","The address of an I/O port only","The instruction opcode"],
-a:0,why:"The PC contains the address of the next instruction to be fetched and executed."
-},
-{
-q:"Which register contains the address of the memory location to be accessed?",
-opts:["MDR","IR","MAR","ALU"],
-a:2,why:"The MAR holds the address of the memory location being accessed."
-},
-{
-q:"What is stored in the Memory Data Register (MDR)?",
-opts:["The next instruction address","Data read from or written to memory","The clock frequency","The current bus mode"],
-a:1,why:"The MDR holds data being read into or read out of memory."
-},
-{
-q:"How many bits are in one byte?",
-opts:["4","8","16","32"],
-a:1,why:"A byte is defined as 8 bits."
-},
-{
-q:"What is a word in memory organization?",
-opts:["A single address line","A collection of bits stored or retrieved simultaneously","A type of control signal","A physical memory chip"],
-a:1,why:"A word is a collection of bits stored or retrieved simultaneously."
-},
-{
-q:"What is the word length?",
-opts:["The number of addresses","The number of bits in a word","The number of memory chips","The number of buses"],
-a:1,why:"Word length is the number of bits in a word."
-},
-{
-q:"In byte-addressable memory, what does each address identify?",
-opts:["One bit","One byte","One word only","One register"],
-a:1,why:"Addresses are typically assigned to individual bytes."
-},
-{
-q:"What is the capacity in bytes of a memory with 16 address bits?",
-opts:["16,384","32,768","65,536","131,072"],
-a:2,why:"The capacity is 2^16 = 65,536 bytes."
-},
-{
-q:"What is the last byte address in a 16-bit address space?",
-opts:["65,535","65,536","16,383","32,767"],
-a:0,why:"The last address is 2^16 − 1 = 65,535."
-},
-{
-q:"A 64 KiB memory uses 4-byte words. How many words does it contain?",
-opts:["8,192","16,384","32,768","65,536"],
-a:1,why:"65,536 divided by 4 equals 16,384 words."
-},
-{
-q:"Which byte-ordering scheme stores the least significant byte at the lowest address?",
-opts:["Big-endian","Little-endian","Middle-endian","Virtual addressing"],
-a:1,why:"Little-endian places the least significant byte at the lowest address."
-},
-{
-q:"Which byte-ordering scheme stores the most significant byte at the lowest address?",
-opts:["Little-endian","Big-endian","Byte-addressable","Word-aligned"],
-a:1,why:"Big-endian places the most significant byte at the lowest address."
-},
-{
-q:"What is the first step in a typical memory read cycle?",
-opts:["Activate the write signal","Place the address on the address bus","Place data on the data bus","Drop the read signal"],
-a:1,why:"The address is first placed on the address bus."
-},
-{
-q:"During a typical memory write cycle, what is placed on the data bus?",
-opts:["The data to be written","The next instruction address","The memory clock","The parity result"],
-a:0,why:"The write data is placed on the data bus."
-},
-{
-q:"Which bus carries the address of the memory location?",
-opts:["Data bus","Control bus","Address bus","Expansion bus"],
-a:2,why:"The address bus carries the memory address."
-},
-{
-q:"What is the main purpose of virtual memory?",
-opts:["To eliminate the need for addresses","To create the illusion of a larger memory","To replace the processor cache","To make RAM non-volatile"],
-a:1,why:"Virtual memory creates the illusion of a much larger memory."
-},
-{
-q:"When a program runs, virtual addresses are mapped to which addresses?",
-opts:["Physical addresses","Clock addresses","Register names","Parity addresses"],
-a:0,why:"Virtual addresses are mapped to physical addresses at run time."
-},
-{
-q:"Which statement best describes RAM?",
-  opts:["It is always read-only","It allows data to be accessed in any order and is generally read/write","It retains data without power in all cases","It can only store instructions"],
-a:1,why:"RAM supports random access and is commonly read/write memory."
-},
-{
-q:"What does volatile memory do when electrical power is lost?",
-opts:["Keeps all data permanently","Loses its stored data","Converts data to ROM","Automatically refreshes"],
-a:1,why:"Volatile memory loses stored data when power is removed."
-},
-{
-q:"Which type of RAM retains data as long as power is supplied, without periodic refresh?",
-opts:["DRAM","SRAM","EPROM","Flash"],
-a:1,why:"SRAM retains data while power is available."
-},
-{
-q:"How does DRAM store data bits?",
-opts:["In a semiconductor latch","As charge on a capacitor","Using ultraviolet light","In a magnetic disk"],
-a:1,why:"DRAM stores bits as charge on capacitors."
-},
-{
-q:"Why does DRAM require refresh circuitry?",
-opts:["Its capacitors lose stored charge over time","It is non-volatile","It uses a 64-bit address bus","It stores data optically"],
-a:0,why:"The stored capacitor charge must be refreshed."
-},
-{
-q:"Compared with DRAM, SRAM is described as:",
-opts:["Slower and cheaper","Faster, more complex, larger and more expensive","Non-volatile and erasable","Requiring ultraviolet erasure"],
-a:1,why:"SRAM is faster but more complex, larger, and more expensive."
-},
-{
-q:"What is the smallest storage unit of RAM capable of storing one bit?",
-opts:["RAM cell","Word line","Byte enable","Address latch"],
-a:0,why:"A RAM cell is the smallest RAM storage unit and stores one bit."
-},
-{
-q:"Which memory family is non-volatile?",
-opts:["SRAM only","DRAM only","ROM","Both SRAM and DRAM"],
-a:2,why:"ROM retains data when power is removed."
-},
-{
-q:"How is UV EPROM erased?",
-opts:["By electrical refresh","By exposure to ultraviolet radiation","By removing the address bus","By rewriting each byte through the CPU"],
-a:1,why:"UV EPROM is erased using ultraviolet radiation."
-},
-{
-q:"What is a key feature of EEPROM?",
-opts:["It can be selectively erased electrically while in-circuit","It must be erased with UV light","It loses data when power is removed","It cannot be reprogrammed"],
-a:0,why:"EEPROM can be selectively erased electrically while in a circuit."
-},
-{
-q:"Flash memory is described as:",
-opts:["Volatile read-only memory","High-density, non-volatile read/write memory","A type of DRAM requiring refresh","A processor register"],
-a:1,why:"Flash memory is non-volatile and supports read/write operations."
-},
-{
-q:"According to the lecture, what is one limitation of flash memory?",
-opts:["It has no address lines","A bit set to 0 can be reset to 1 only by erasing an entire block","It loses all data when power is removed","It cannot be read"],
-a:1,why:"Returning a programmed 0 to 1 requires erasing an entire block."
-},
-{
-q:"What is the data path width of a SIMM?",
-opts:["8-bit","16-bit","32-bit","64-bit"],
-a:2,why:"SIMMs have a 32-bit data path."
-},
-{
-q:"What is the data path width of a DIMM?",
-opts:["16-bit","32-bit","64-bit","128-bit"],
-a:2,why:"DIMMs have a 64-bit data path."
-},
-{
-q:"When MN/MX is high, the 8086 operates in which mode?",
-opts:["Maximum mode","Minimum mode","Protected mode","Virtual mode"],
-a:1,why:"A high MN/MX level selects minimum mode."
-},
-{
-q:"In minimum mode, MN/MX is connected to:",
-opts:["Ground (logic low)","VCC (logic high)","The data bus","The clock input"],
-a:1,why:"For minimum mode, MN/MX is tied to VCC."
-},
-{
-q:"In maximum mode, MN/MX is:",
-opts:["Tied to VCC","Grounded (logic low)","Left permanently floating","Used as the READY input"],
-a:1,why:"Maximum mode uses MN/MX grounded at logic low."
-},
-{
-q:"In minimum mode, who generates the bus control signals?",
-opts:["An external bus controller only","The 8086 itself","The DMA controller","The memory module"],
-a:1,why:"In minimum mode, the 8086 itself generates bus control signals."
-},
-{
-q:"What is the purpose of the 8086 HOLD input?",
-  opts:["To request control of the bus","To reset the processor","To enable the instruction queue","To indicate parity"],
-a:0,why:"HOLD requests control of the bus, often for DMA."
-},
-{
-q:"What does HLDA indicate on the 8086?",
-opts:["The processor has accepted HOLD","The memory read cycle has ended","The processor has entered maximum mode","The instruction queue is empty"],
-a:0,why:"HLDA is the hold-acknowledge signal."
-},
-{
-q:"What do the S0, S1, and S2 signals do in maximum mode?",
-opts:["Store the instruction","Provide status used by the bus controller to generate timing and control signals","Select the memory word length","Carry data parity"],
-a:1,why:"These status signals are decoded by the bus controller."
-},
-{
-q:"What is the function of QS0 and QS1?",
-opts:["Indicate queue status","Select byte lanes","Control DRAM refresh","Carry address bits"],
-a:0,why:"QS0 and QS1 provide processor queue status."
-},
-{
-q:"Which request/grant line has higher priority in maximum mode?",
-opts:["RQ/GT1","RQ/GT0","Both always have equal priority","Neither line has priority"],
-a:1,why:"RQ/GT0 has higher priority than RQ/GT1."
-},
-{
-q:"When is the 8086 LOCK output activated?",
-opts:["During every memory read","By an instruction with the LOCK prefix","Only during reset","When MN/MX is high"],
-a:1,why:"LOCK is activated by the LOCK prefix."
-},
-{
-q:"How wide is the Pentium data bus?",
-opts:["16 bits","32 bits","64 bits","128 bits"],
-a:2,why:"The Pentium data bus consists of D0 through D63."
-},
-{
-q:"Which Pentium signals identify the bytes to be read or written?",
-opts:["DP0–DP7","BE0#–BE7#","A3–A31","S0–S2"],
-a:1,why:"The byte-enable signals identify the byte lanes."
-},
-{
-q:"What is the role of DP0–DP7 in the Pentium?",
-opts:["Address decoding","Even parity encoding for the eight data bytes","Bus arbitration","Cache invalidation"],
-a:1,why:"The eight data parity lines encode even parity."
-},
-{
-q:"What does PCHK# indicate?",
-opts:["The result of a parity check on data read by the processor","The current clock period","The selected memory address","The state of the instruction queue"],
-a:0,why:"PCHK# indicates the result of a parity check."
-},
-{
-q:"What is the Pentium RESET behavior described in the notes?",
-opts:["It starts at FFFFFFF0H and invalidates internal caches","It preserves all caches and starts at address zero","It only clears the instruction queue","It changes the bus to 16 bits"],
-a:0,why:"RESET starts execution at FFFFFFF0H and invalidates internal caches."
-},
-{
-q:"How does INIT differ from RESET in the Pentium notes?",
-opts:["INIT flushes caches but RESET does not","INIT does not flush internal caches and floating-point registers","INIT is used instead of RESET after power-up","INIT changes the data bus width"],
-a:1,why:"INIT does not flush internal caches or floating-point registers."
-},
-{
-q:"How many clock states are in a typical 8086 bus cycle?",
-opts:["Two","Three","Four","Six"],
-a:2,why:"A typical 8086 bus cycle consists of T1, T2, T3, and T4."
-},
-{
-q:"What may be inserted if a peripheral is too slow to respond during an 8086 bus cycle?",
-opts:["Queue states","Wait states (Tw)","Parity states","Refresh words"],
-a:1,why:"Wait states can extend the bus cycle until the device is ready."
-},
-{
-q:"What does the READY signal do in the 8086 timing context?",
-opts:["Indicates whether an external device is ready to complete the transfer","Selects minimum or maximum mode","Carries the memory address","Resets the clock"],
-a:0,why:"READY coordinates the processor with external device readiness."
-},
-{
-q:"What is the period of a waveform?",
-opts:["The maximum voltage only","The time for one complete cycle","The time for a rising edge only","The difference between two address lines"],
-a:1,why:"The period is the time for one complete waveform cycle."
-}
-];
+        <!-- 2. QUIZ QUESTION SCREEN -->
+        <section id="quizScreen" class="hidden space-y-6">
+            <!-- Progress Header -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="text-xs font-semibold px-3 py-1 bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 rounded-full">
+                        <span id="candidateName">Student</span>
+                    </div>
+                    <span class="text-slate-400 dark:text-slate-600">•</span>
+                    <span id="questionCounter" class="text-sm font-medium text-slate-600 dark:text-slate-300">Question 1 of 12</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="flex items-center space-x-3 w-full md:w-64">
+                    <div class="flex-1 bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                        <div id="progressBar" class="bg-brand-600 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                    <span id="progressPercent" class="text-xs font-bold text-slate-500 dark:text-slate-400 w-9 text-right">0%</span>
+                </div>
+            </div>
 
-let answers = {};
-let index = 0;
-let student = "";
+            <!-- Question Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-xl border border-slate-100 dark:border-slate-700/60 transition-all">
+                <h3 id="questionText" class="text-lg md:text-xl font-bold mb-6 text-slate-900 dark:text-white leading-relaxed">
+                    Question text goes here...
+                </h3>
 
-function startExam(){
-  student = document.getElementById("student").value.trim() || "Student";
-  document.getElementById("start").style.display="none";
-  document.getElementById("exam").style.display="block";
-  render();
-}
-  function render(){
-  const item = bank[index];
-  const chosen = answers[index];
+                <!-- MCQ Options Container -->
+                <div id="optionsContainer" class="space-y-3">
+                    <!-- Dynamic Options Inserted Here -->
+                </div>
+            </div>
 
-  document.getElementById("counter").textContent =
-    QUESTION ${index+1} / ${bank.length};
+            <!-- Control Buttons -->
+            <div class="flex items-center justify-between pt-2">
+                <button id="prevBtn" onclick="prevQuestion()" class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-2 transition-all">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                    <span>Previous</span>
+                </button>
+                
+                <div class="flex space-x-3">
+                    <button id="nextBtn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium shadow-md flex items-center space-x-2 transition-all">
+                        <span>Next</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button id="submitBtn" onclick="submitQuiz()" class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-md flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-check text-sm"></i>
+                        <span>Submit Exam</span>
+                    </button>
+                </div>
+            </div>
+        </section>
 
-  document.getElementById("question").textContent=item.q;
-  document.getElementById("choices").innerHTML="";
+        <!-- 3. RESULT & REVIEW SCREEN -->
+        <section id="resultScreen" class="hidden space-y-8">
+            <!-- Result Summary Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 shadow-xl border border-slate-100 dark:border-slate-700/60 text-center relative overflow-hidden">
+                <div class="inline-block p-4 rounded-full bg-slate-100 dark:bg-slate-700/50 mb-4">
+                    <i id="scoreBadgeIcon" class="fa-solid fa-award text-4xl text-amber-500"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">Quiz Completed!</h2>
+                <p id="resultStudentMeta" class="text-sm text-slate-500 dark:text-slate-400 mb-6">Candidate: John Doe | Date: Nov 6, 2026</p>
 
-  item.opts.forEach((opt,i)=>{
-    const el=document.createElement("div");
-    el.className="choice"+(chosen===i?" selected":"");
-    el.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span></span>`;
-    el.querySelector("span:last-child").textContent=opt;
-    el.onclick=()=>{
-      answers[index]=i;
-      render();
-    };
-    document.getElementById("choices").appendChild(el);
-  });
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">Score Percentage</p>
+                        <p id="scorePercent" class="text-3xl font-black text-brand-600 dark:text-brand-400">0%</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">Total Questions</p>
+                        <p id="totalQuestionsCount" class="text-3xl font-black text-slate-700 dark:text-slate-200">0</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-800/40">
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 uppercase font-bold tracking-wider mb-1">Correct Answers</p>
+                        <p id="correctCount" class="text-3xl font-black text-emerald-600 dark:text-emerald-400">0</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-800/40">
+                        <p class="text-xs text-rose-600 dark:text-rose-400 uppercase font-bold tracking-wider mb-1">Incorrect Answers</p>
+                        <p id="incorrectCount" class="text-3xl font-black text-rose-600 dark:text-rose-400">0</p>
+                    </div>
+                </div>
 
-  const count=Object.keys(answers).length;
-  document.getElementById("answered").textContent=`Answered: ${count}`;
-  document.getElementById("bar").style.width=
-    (count/bank.length*100)+"%";
+                <!-- Action Toolbar -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <button onclick="downloadTextResults()" class="px-5 py-3 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-semibold hover:opacity-90 flex items-center space-x-2 shadow-md transition-all">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download Results (.txt)</span>
+                    </button>
+                    <button onclick="restartQuiz()" class="px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-2 transition-all">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Retake Exam</span>
+                    </button>
+                </div>
+            </div>
 
-  document.getElementById("prev").disabled=index===0;
-  document.getElementById("next").textContent=
-    index===bank.length-1?"Submit Exam":"Next";
-}
+            <!-- Detailed Answers Review -->
+            <div class="space-y-6">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-clipboard-check text-brand-600 dark:text-brand-400"></i>
+                    <span>Detailed Answer Review</span>
+                </h3>
+                
+                <div id="reviewList" class="space-y-4">
+                    <!-- Detailed review elements inserted via JS -->
+                </div>
+            </div>
+        </section>
 
-function move(dir){
-  if(dir===1 && index===bank.length-1){
-    finish();
-    return;
-  }
-  index=Math.max(0,Math.min(bank.length-1,index+dir));
-  render();
-}
+    </main>
 
-function finish(){
-  const unanswered=bank.length-Object.keys(answers).length;
-  if(unanswered && !confirm(`You have ${unanswered} unanswered questions. Submit anyway?`)) return;
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 text-center text-xs text-slate-500 dark:text-slate-400">
+        Computer Architecture & Organization Module • Interactive MCQ Examination Engine
+    </footer>
 
-  let score=0;
-  bank.forEach((q,i)=>{
-    if(answers[i]===q.a) score++;
-  });
+    <!-- Quiz Logic JavaScript -->
+    <script>
+        // Questions Pool based on Computer Architecture Lectures (8086, Pentium Signals, Bus Cycle, Memory, Cache)
+        const quizData = [
+            {
+                id: 1,
+                question: "Which signal on the 8086 microprocessor is used to demultiplex the multiplexed Address/Data bus (AD0 - AD15)?",
+                options: [
+                    "DEN (Data Enable)",
+                    "DT/R (Data Transmit/Receive)",
+                    "ALE (Address Latch Enable)",
+                    "BHE (Bus High Enable)"
+                ],
+                correct: 2,
+                explanation: "The ALE (Address Latch Enable) signal output indicates a valid address is available on the multiplexed bus. External latches capture the address on the falling edge of ALE."
+            },
+            {
+                id: 2,
+                question: "Which pin status determines whether the 8086 microprocessor operates in Minimum Mode or Maximum Mode?",
+                options: [
+                    "TEST pin",
+                    "MN/MX pin",
+                    "READY pin",
+                    "HOLD pin"
+                ],
+                correct: 1,
+                explanation: "When MN/MX is tied to VCC (High), the 8086 works in Minimum Mode (single processor). When grounded (Low), it operates in Maximum Mode (multiprocessor/coprocessor mode)."
+            },
+            {
+                id: 3,
+                question: "In the 8086 minimum mode bus cycle, how many basic clock states (T-states) constitute a standard bus cycle?",
+                options: [
+                    "2 Clock states (T1, T2)",
+                    "3 Clock states (T1, T2, T3)",
+                    "4 Clock states (T1, T2, T3, T4)",
+                    "6 Clock states (T1 to T6)"
+                ],
+                correct: 2,
+                explanation: "A standard 8086 bus cycle consists of four clock states: T1 (Address out), T2 (Bus turnaround/float), T3 (Data transfer wait/prep), and T4 (Data sampling/completion)."
+            },
+            {
+                id: 4,
+                question: "What is the purpose of inserting Wait States (Tw) into an 8086 microprocessor bus cycle?",
+                options: [
+                    "To speed up cache memory access times",
+                    "To accommodate slower peripheral devices or memory chips via the READY line",
+                    "To switch processor mode from Minimum to Maximum",
+                    "To handle non-maskable interrupts (NMI)"
+                ],
+                correct: 1,
+                explanation: "If a memory or I/O device is too slow to respond, the READY line is pulled low, causing the 8086 to insert Wait States (Tw) to extend the bus cycle."
+            },
+            {
+                id: 5,
+                question: "Which byte ordering scheme stores the Most Significant Byte (MSB) at the lowest memory address?",
+                options: [
+                    "Little-endian",
+                    "Big-endian",
+                    "Bi-endian",
+                    "Stack-endian"
+                ],
+                correct: 1,
+                explanation: "In Big-endian ordering, the Most Significant Byte (MSB) is stored at the lowest memory address location (e.g. byte address 100)."
+            },
+            {
+                id: 6,
+                question: "What is the total byte capacity of a memory system with a 24-bit address bus?",
+                options: [
+                    "64 KB",
+                    "1 MB",
+                    "16 MB",
+                    "4 GB"
+                ],
+                correct: 2,
+                explanation: "The size of byte-addressable memory is given by 2^k bytes. For a 24-bit address bus, 2^24 = 16,777,216 bytes = 16 MB."
+            },
+            {
+                id: 7,
+                question: "Which type of RAM uses semiconductor latch/flip-flop memory cells and does NOT require periodic refresh circuitry?",
+                options: [
+                    "DRAM (Dynamic RAM)",
+                    "SRAM (Static RAM)",
+                    "FPM DRAM",
+                    "SDRAM"
+                ],
+                correct: 1,
+                explanation: "SRAM (Static RAM) stores bits using flip-flops/latches. It retains data as long as power is applied without needing refreshing, making it fast but more expensive."
+            },
+            {
+                id: 8,
+                question: "Which statement accurately describes Dynamic RAM (DRAM)?",
+                options: [
+                    "Stores data bits as charges on capacitors and requires constant refresh cycles",
+                    "Stores data in magnetic tracks and sectors",
+                    "Non-volatile memory erased by ultraviolet light",
+                    "Provides faster access time than L1 Cache SRAM"
+                ],
+                correct: 0,
+                explanation: "DRAM stores data bits as electrical charges on tiny capacitors. Because charge leaks over time, DRAM requires continuous refresh cycles to maintain stored data."
+            },
+            {
+                id: 9,
+                question: "Which type of ROM can be programmed by the user and erased by exposure to high-intensity Ultraviolet (UV) radiation?",
+                options: [
+                    "Mask ROM",
+                    "EEPROM",
+                    "UV-EPROM",
+                    "Flash Memory"
+                ],
+                correct: 2,
+                explanation: "UV-EPROM features a transparent quartz window allowing high-intensity ultraviolet light to neutralize charges on floating gates and erase memory contents."
+            },
+            {
+                id: 10,
+                question: "In Cache Memory terms, what is a 'Miss Penalty'?",
+                options: [
+                    "The time required to write a bit into SRAM",
+                    "The percentage of memory requests found in the cache",
+                    "The additional time required to replace a block in cache and deliver data to the processor upon a cache miss",
+                    "The clock cycle delay caused by an instruction prefetch queue overflow"
+                ],
+                correct: 2,
+                explanation: "A Miss Penalty is the extra time needed to retrieve data from lower memory (main DRAM/disk) and copy the block into cache when the requested data is not in cache."
+            },
+            {
+                id: 11,
+                question: "In the Pentium processor architecture, what is the function of the M/IO# control signal?",
+                options: [
+                    "Distinguishes between a memory access cycle (M/IO# = 1) and an I/O cycle (M/IO# = 0)",
+                    "Controls data bus direction between transmission and reception",
+                    "Enables cache line refill policies",
+                    "Indicates even parity on data bus lines D0-D63"
+                ],
+                correct: 0,
+                explanation: "The M/IO# signal defines the active bus cycle type: High (1) for Memory operations and Low (0) for I/O port operations."
+            },
+            {
+                id: 12,
+                question: "Which cache mapping scheme permits any memory block to be placed into any arbitrary line in the cache?",
+                options: [
+                    "Direct Mapping",
+                    "Set-Associative Mapping",
+                    "Associative Mapping (Fully Associative)",
+                    "Page Table Mapping"
+                ],
+                correct: 2,
+                explanation: "Associative Mapping has no restrictions; any main memory block can be stored into any available cache line."
+            }
+        ];
 
-  document.getElementById("exam").style.display="none";
-  document.getElementById("result").style.display="block";
-  document.getElementById("greeting").textContent=`Well done, ${student}!`;
-  document.getElementById("score").textContent=`${score} / ${bank.length}`;
-  document.getElementById("summary").textContent=
-    Your score: ${Math.round(score/bank.length*100)}%. Correct: ${score}. Incorrect or unanswered: ${bank.length-score}.;
-}
+        // State Management
+        let currentQuestionIndex = 0;
+        let studentAnswers = {};
+        let studentName = "";
+        let quizDate = "";
 
-function showReview(){
-  const box=document.getElementById("review");
-  box.style.display="block";
-  box.innerHTML="";
+        // DOM Element Cache
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const studentNameInput = document.getElementById('studentName');
+        const candidateNameDisplay = document.getElementById('candidateName');
+        const questionCounter = document.getElementById('questionCounter');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
 
-  bank.forEach((q,i)=>{
-    const ok=answers[i]===q.a;
-    const div=document.createElement("div");
-    div.className="review";
+        // Dark/Light Theme Switching
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
 
-    const h=document.createElement("h3");
-    h.textContent=`${i+1}. ${q.q} — ${ok?"Correct":"Incorrect"}`;
-    h.className=ok?"correct":"wrong";
-    div.appendChild(h);
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            themeIcon.className = isDark ? 'fa-solid fa-sun text-lg text-amber-400' : 'fa-solid fa-moon text-lg';
+        });
 
-    const p=document.createElement("p");
-    p.textContent=`Your answer: ${answers[i]===undefined?"Not answered":q.opts[answers[i]]} | Correct answer: ${q.opts[q.a]}`;
-    div.appendChild(p);
+        // Initialize Exam
+        function startQuiz(e) {
+            e.preventDefault();
+            studentName = studentNameInput.value.trim() || "Student";
+            quizDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            
+            candidateNameDisplay.textContent = studentName;
+            
+            welcomeScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            studentAnswers = {};
+            renderQuestion();
+        }
 
-    const e=document.createElement("p");
-    e.className="explain";
-    e.textContent=q.why;
-    div.appendChild(e);
+        // Render Current Question
+        function renderQuestion() {
+            const currentQ = quizData[currentQuestionIndex];
+            questionText.textContent = `${currentQ.id}. ${currentQ.question}`;
+            
+            // Render Options
+            optionsContainer.innerHTML = '';
+            currentQ.options.forEach((opt, idx) => {
+                const isSelected = studentAnswers[currentQuestionIndex] === idx;
+                const optButton = document.createElement('button');
+                optButton.className = `w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 ${
+                    isSelected 
+                        ? 'border-brand-600 bg-brand-50 dark:bg-brand-950/40 text-brand-900 dark:text-brand-200 ring-2 ring-brand-500/30' 
+                        : 'border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-700/50 text-slate-800 dark:text-slate-200'
+                }`;
+                optButton.onclick = () => selectOption(idx);
+                
+                optButton.innerHTML = `
+                    <div class="w-6 h-6 rounded-full border flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                        isSelected 
+                            ? 'border-brand-600 bg-brand-600 text-white' 
+                            : 'border-slate-300 dark:border-slate-600'
+                    }">
+                        <span class="text-xs font-bold">${String.fromCharCode(65 + idx)}</span>
+                    </div>
+                    <span class="text-sm md:text-base font-medium">${opt}</span>
+                `;
+                optionsContainer.appendChild(optButton);
+            });
 
-    box.appendChild(div);
-  });
-}
+            // Update Header & Progress
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+            const pct = Math.round(((currentQuestionIndex + 1) / quizData.length) * 100);
+            progressBar.style.width = `${pct}%`;
+            progressPercent.textContent = `${pct}%`;
 
-function downloadResult(){
-  let score=0;
-  bank.forEach((q,i)=>{if(answers[i]===q.a)score++});
+            // Update Navigation Buttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+        }
 
-  let lines=[
-    "Computer Architecture Exam Result",
-    "Student: "+student,
-    "Score: "+score+"/"+bank.length,
-    "Percentage: "+Math.round(score/bank.length*100)+"%",
-    ""
-  ];
+        // Option Selection Handler
+        function selectOption(index) {
+            studentAnswers[currentQuestionIndex] = index;
+            renderQuestion();
+        }
 
-  bank.forEach((q,i)=>{
-    lines.push(
-      ${i+1}. ${q.q},
-      Your answer: ${answers[i]===undefined?"Not answered":q.opts[answers[i]]},
-      Correct answer: ${q.opts[q.a]},
-      Explanation: ${q.why},
-      ""
-    );
-  });
+        // Navigation Actions
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
 
-  const blob=new Blob([lines.join("\n")],{type:"text/plain"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="exam-result.txt";
-  a.click();
-  URL.revokeObjectURL(url);
-}
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
 
-document.getElementById("startBtn").onclick=startExam;
-document.getElementById("prev").onclick=()=>move(-1);
-document.getElementById("next").onclick=()=>move(1);
-document.getElementById("reviewBtn").onclick=showReview;
-document.getElementById("downloadBtn").onclick=downloadResult;
-document.getElementById("retakeBtn").onclick=()=>location.reload();
-</script>
+        // Calculate and Submit Results
+        function submitQuiz() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (studentAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const total = quizData.length;
+            const incorrectCount = total - correctCount;
+            const scorePct = Math.round((correctCount / total) * 100);
+
+            // Populate Summary Statistics
+            document.getElementById('resultStudentMeta').textContent = `Candidate: ${studentName} | Date: ${quizDate}`;
+            document.getElementById('scorePercent').textContent = `${scorePct}%`;
+            document.getElementById('totalQuestionsCount').textContent = total;
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('incorrectCount').textContent = incorrectCount;
+
+            // Score Badge Icon Style
+            const badgeIcon = document.getElementById('scoreBadgeIcon');
+            if (scorePct >= 80) {
+                badgeIcon.className = "fa-solid fa-trophy text-4xl text-amber-500";
+            } else if (scorePct >= 50) {
+                badgeIcon.className = "fa-solid fa-award text-4xl text-blue-500";
+            } else {
+                badgeIcon.className = "fa-solid fa-circle-exclamation text-4xl text-rose-500";
+            }
+
+            // Build Answer Review HTML
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const userAns = studentAnswers[idx];
+                const isCorrect = userAns === q.correct;
+
+                const reviewCard = document.createElement('div');
+                reviewCard.className = `p-5 rounded-2xl border ${
+                    isCorrect 
+                        ? 'border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/40 dark:bg-emerald-950/20' 
+                        : 'border-rose-200 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20'
+                }`;
+
+                const userAnsText = userAns !== undefined ? `${String.fromCharCode(65 + userAns)}. ${q.options[userAns]}` : "Not Answered";
+                const correctAnsText = `${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+
+                reviewCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">
+                            Question ${idx + 1}: ${q.question}
+                        </h4>
+                        <span class="px-2.5 py-1 text-xs font-bold rounded-lg flex-shrink-0 ${
+                            isCorrect 
+                                ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300' 
+                                : 'bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300'
+                        }">
+                            ${isCorrect ? '<i class="fa-solid fa-check mr-1"></i> Correct' : '<i class="fa-solid fa-xmark mr-1"></i> Incorrect'}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1.5 text-sm mb-4">
+                        <p class="${isCorrect ? 'text-emerald-800 dark:text-emerald-300 font-medium' : 'text-rose-800 dark:text-rose-300 font-medium'}">
+                            <span class="font-semibold text-slate-500 dark:text-slate-400">Your Answer:</span> ${userAnsText}
+                        </p>
+                        ${!isCorrect ? `
+                            <p class="text-emerald-800 dark:text-emerald-300 font-medium">
+                                <span class="font-semibold text-slate-500 dark:text-slate-400">Correct Answer:</span> ${correctAnsText}
+                            </p>
+                        ` : ''}
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 text-xs md:text-sm text-slate-600 dark:text-slate-300">
+                        <strong class="font-semibold text-brand-600 dark:text-brand-400 block mb-1">
+                            <i class="fa-solid fa-lightbulb mr-1"></i> Architectural Explanation:
+                        </strong>
+                        ${q.explanation}
+                    </div>
+                `;
+                reviewList.appendChild(reviewCard);
+            });
+        }
+
+        // Export Results to Plain Text File (.txt)
+        function downloadTextResults() {
+            let correctCount = 0;
+            quizData.forEach((q, idx) => {
+                if (studentAnswers[idx] === q.correct) correctCount++;
+            });
+            const total = quizData.length;
+            const scorePct = Math.round((correctCount / total) * 100);
+
+            let txtContent = `==================================================\n`;
+            txtContent += ` COMPUTER ARCHITECTURE & ORGANIZATION QUIZ REPORT\n`;
+            txtContent += `==================================================\n\n`;
+            txtContent += `Student Name : ${studentName}\n`;
+            txtContent += `Date & Time  : ${quizDate}\n`;
+            txtContent += `Final Score  : ${scorePct}% (${correctCount}/${total} Correct)\n`;
+            txtContent += `Status       : ${scorePct >= 50 ? 'PASSED' : 'NEEDS IMPROVEMENT'}\n\n`;
+            txtContent += `--------------------------------------------------\n`;
+            txtContent += `DETAILED BREAKDOWN BY QUESTION:\n`;
+            txtContent += `--------------------------------------------------\n\n`;
+
+            quizData.forEach((q, idx) => {
+                const userAns = studentAnswers[idx];
+                const isCorrect = userAns === q.correct;
+                const userAnsText = userAns !== undefined ? `${String.fromCharCode(65 + userAns)}. ${q.options[userAns]}` : "Not Answered";
+                const correctAnsText = `${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}`;
+
+                txtContent += `Q${idx + 1}: ${q.question}\n`;
+                txtContent += `Result        : ${isCorrect ? 'CORRECT [✓]' : 'INCORRECT [✗]'}\n`;
+                txtContent += `Your Answer   : ${userAnsText}\n`;
+                txtContent += `Correct Answer: ${correctAnsText}\n`;
+                txtContent += `Explanation   : ${q.explanation}\n\n`;
+            });
+
+            txtContent += `==================================================\n`;
+            txtContent += ` End of Official Assessment Report\n`;
+            txtContent += `==================================================\n`;
+
+            // Trigger Client-side File Download
+            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Computer_Architecture_Quiz_${studentName.replace(/\s+/g, '_')}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Restart Exam Action
+        function restartQuiz() {
+            resultScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+            studentNameInput.value = '';
+        }
+    </script>
 </body>
 </html>
